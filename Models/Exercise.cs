@@ -3,6 +3,7 @@
     public class Exercise
     {
         public int Id { get; set; }
+        public int User_id { get; set; }
         public int Weight { get; set; }
         public int Reps { get; set; }
         public int Series {  get; set; }

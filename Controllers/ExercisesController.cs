@@ -170,5 +170,21 @@ namespace WebApplication1.Controllers
         {
           return (_context.Exercise?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        // GET: Exercises/Stats/5
+        public IActionResult Stats(int userId)
+        {
+            var exercises = _context.Exercise.Where(e => e.UserId == userId).ToList();
+            var fourWeeksAgo = DateTime.Now.Subtract(TimeSpan.FromDays(28));
+            var recentExercises = exercises.Where(e => e.Session.Start >= fourWeeksAgo).ToList();
+            int sessionsInLastFourWeeks = recentExercises.Select(e => e.SessionId).Distinct().Count();
+            int bestResult = exercises.Max(e => e.Weight * e.Reps);
+            var statsViewModel = new StatsViewModel
+            {
+                SessionsInLastFourWeeks = sessionsInLastFourWeeks,
+                BestResult = bestResult
+            };
+            return View(statsViewModel);
+        }
+
     }
 }
